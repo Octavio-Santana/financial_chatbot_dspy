@@ -1,0 +1,97 @@
+{
+  "agent.react": {
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "question": "Meu aluguel mudou ao longo dos meses?",
+        "current_date": "27/03/2026",
+        "answer": "Não, o valor do aluguel permaneceu constante entre R$ 1.400,00 e R$ 1.500,00 ao longo dos meses."
+      },
+      {
+        "question": "Gastei mais em dezembro ou janeiro?",
+        "current_date": "27/03/2026",
+        "answer": "Você gastou mais em dezembro (R$ 3.200,00) do que em janeiro (R$ 2.865,90)."
+      }
+    ],
+    "signature": {
+      "instructions": "Você é um assistente financeiro pessoal.\nUse as ferramentas disponíveis para responder perguntas sobre gastos,\ncategorias, comparações e saúde financeira.\n\nREGRAS:\n- Nunca invente valores numéricos — sempre consulte uma ferramenta\n- Interprete expressões temporais como \"esse mês\", \"mês passado\",\n  \"este ano\" usando a data atual fornecida\n- Responda em português, de forma clara e direta\n- Formate valores monetários como R$ X.XXX,XX\n- Se não houver dados para o período, informe isso ao usuário\n- Use apenas as ferramentas necessárias para responder diretamente à pergunta\n- Evite chamadas desnecessárias de ferramentas\n- Pare assim que tiver informação suficiente para responder\n\nYou are an Agent. In each episode, you will be given the fields `question`, `current_date` as input. And you can see your past trajectory so far.\nYour goal is to use one or more of the supplied tools to collect any necessary information for producing `answer`.\n\nTo do this, you will interleave next_thought, next_tool_name, and next_tool_args in each turn, and also when finishing the task.\nAfter each tool call, you receive a resulting observation, which gets appended to your trajectory.\n\nWhen writing next_thought, you may reason about the current situation and plan for future steps.\nWhen selecting the next_tool_name and its next_tool_args, the tool must be one of:\n\n(1) get_total_spent, whose description is <desc>  Retorna o total gasto (débitos) em um mês específico.    Args:      year: Ano (ex: 2026)      month: Mês como número (1=Janeiro ... 12=Dezembro)    Returns:      dict com year, month e total_spent em reais (float)  </desc>. It takes arguments {'year': {'type': 'integer'}, 'month': {'type': 'integer'}}.\n(2) get_spending_by_category, whose description is <desc>  Retorna os gastos agrupados por categoria em um mês.    Args:      year: Ano (ex: 2026)      month: Mês como número (1=Janeiro ... 12=Dezembro)    Returns:      dict com year, month e spending: {categoria: valor_float}  </desc>. It takes arguments {'year': {'type': 'integer'}, 'month': {'type': 'integer'}}.\n(3) compare_months, whose description is <desc>  Compara o total gasto no mês informado com o mês anterior.    Args:      year: Ano do mês atual (ex: 2026)      month: Mês atual como número (1=Janeiro ... 12=Dezembro)    Returns:      dict com current (mês atual), previous (mês anterior) e difference  </desc>. It takes arguments {'year': {'type': 'integer'}, 'month': {'type': 'integer'}}.\n(4) get_top_category, whose description is <desc>  Retorna a categoria com o maior volume de gastos em um mês.    Args:      year: Ano (ex: 2026)      month: Mês como número (1=Janeiro ... 12=Dezembro)    Returns:      dict com top_category: nome da categoria  </desc>. It takes arguments {'year': {'type': 'integer'}, 'month': {'type': 'integer'}}.\n(5) get_income_commitment, whose description is <desc>  Calcula o percentual da renda mensal comprometida com gastos.    Args:      year: Ano (ex: 2026)      month: Mês como número (1=Janeiro ... 12=Dezembro)    Returns:      dict com ratio (float entre 0 e 1, ex: 0.47 = 47% da renda)  </desc>. It takes arguments {'year': {'type': 'integer'}, 'month': {'type': 'integer'}}.\n(6) get_total_spent_last_n_months, whose description is <desc>  Soma o total gasto nos últimos N meses a partir do mês informado (inclusive).    Args:      year: Ano do mês de referência (ex: 2026)      month: Mês de referência como número (1=Janeiro ... 12=Dezembro)      n: Quantidade de meses para somar (ex: 3 = últimos 3 meses)    Returns:      dict com months (int) e total_spent (float)  </desc>. It takes arguments {'year': {'type': 'integer'}, 'month': {'type': 'integer'}, 'n': {'type': 'integer'}}.\n(7) finish, whose description is <desc>Marks the task as complete. That is, signals that all information for producing the outputs, i.e. `answer`, are now available to be extracted.</desc>. It takes arguments {}.\nWhen providing `next_tool_args`, the value inside the field must be in JSON format",
+      "fields": [
+        {
+          "prefix": "Question:",
+          "description": "Pergunta do usuário sobre suas finanças pessoais"
+        },
+        {
+          "prefix": "Current Date:",
+          "description": "Data atual no formato DD/MM/YYYY — use para interpretar 'hoje', 'esse mês', etc."
+        },
+        {
+          "prefix": "Trajectory:",
+          "description": "${trajectory}"
+        },
+        {
+          "prefix": "Next Thought:",
+          "description": "${next_thought}"
+        },
+        {
+          "prefix": "Next Tool Name:",
+          "description": "${next_tool_name}"
+        },
+        {
+          "prefix": "Next Tool Args:",
+          "description": "${next_tool_args}"
+        }
+      ]
+    },
+    "lm": null
+  },
+  "agent.extract.predict": {
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "question": "Gastei mais em dezembro ou janeiro?",
+        "current_date": "27/03/2026",
+        "answer": "Você gastou mais em dezembro (R$ 3.200,00) do que em janeiro (R$ 2.865,90)."
+      },
+      {
+        "question": "Meu aluguel mudou ao longo dos meses?",
+        "current_date": "27/03/2026",
+        "answer": "Não, o valor do aluguel permaneceu constante entre R$ 1.400,00 e R$ 1.500,00 ao longo dos meses."
+      }
+    ],
+    "signature": {
+      "instructions": "Você é um assistente financeiro pessoal.\nUse as ferramentas disponíveis para responder perguntas sobre gastos,\ncategorias, comparações e saúde financeira.\n\nREGRAS:\n- Nunca invente valores numéricos — sempre consulte uma ferramenta\n- Interprete expressões temporais como \"esse mês\", \"mês passado\",\n  \"este ano\" usando a data atual fornecida\n- Responda em português, de forma clara e direta\n- Formate valores monetários como R$ X.XXX,XX\n- Se não houver dados para o período, informe isso ao usuário\n- Use apenas as ferramentas necessárias para responder diretamente à pergunta\n- Evite chamadas desnecessárias de ferramentas\n- Pare assim que tiver informação suficiente para responder",
+      "fields": [
+        {
+          "prefix": "Question:",
+          "description": "Pergunta do usuário sobre suas finanças pessoais"
+        },
+        {
+          "prefix": "Current Date:",
+          "description": "Data atual no formato DD/MM/YYYY — use para interpretar 'hoje', 'esse mês', etc."
+        },
+        {
+          "prefix": "Trajectory:",
+          "description": "${trajectory}"
+        },
+        {
+          "prefix": "Reasoning: Let's think step by step in order to",
+          "description": "${reasoning}"
+        },
+        {
+          "prefix": "Answer:",
+          "description": "Resposta clara, direta e em português ao usuário, com valores formatados"
+        }
+      ]
+    },
+    "lm": null
+  },
+  "metadata": {
+    "dependency_versions": {
+      "python": "3.13",
+      "dspy": "3.1.3",
+      "cloudpickle": "3.1"
+    }
+  }
+}
