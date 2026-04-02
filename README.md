@@ -98,7 +98,7 @@ financial-chatbot-dspy/
 ### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/seu-usuario/financial-chatbot-dspy.git
+git clone https://github.com/Octavio-Santana/financial_chatbot_dspy.git
 cd financial-chatbot-dspy
 ```
 
